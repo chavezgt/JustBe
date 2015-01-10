@@ -1,0 +1,5 @@
+/home/chavezgt/AndroidStudioProjects/Chronometer/app/build/intermediates/classes/debug
+/home/chavezgt/AndroidStudioProjects/Chronometer/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-ac144f2b2fca7e3bbcccc95fdef72d60104cf4ff.jar
+/home/chavezgt/AndroidStudioProjects/Chronometer/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-33d7ab2c2d21e6c3c6dc42e10c8fa9723cc7a497.jar
+/home/chavezgt/AndroidStudioProjects/Chronometer/app/build/intermediates/pre-dexed/debug/classes-4aa3a8287a0fb7ad09a9e4bff0d377efb7d5606d.jar
+/home/chavezgt/AndroidStudioProjects/Chronometer/app/build/intermediates/pre-dexed/debug/classes-cddc6200bc3ed7f25b925f33d34ca1eb9ae641c7.jar
