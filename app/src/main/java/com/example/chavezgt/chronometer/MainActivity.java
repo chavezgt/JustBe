@@ -67,6 +67,7 @@ private  static long currentTime;
         if (ScreenOffReceiver.wasScreenOn) {
             // THIS IS THE CASE WHEN ONPAUSE() IS CALLED BY THE SYSTEM DUE TO A SCREEN STATE CHANGE
             System.out.println("SCREEN TURNED OFF");
+            stopChron(findViewById(R.id.chronos));
         } else {
             // THIS IS WHEN ONPAUSE() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
         }
@@ -79,6 +80,8 @@ private  static long currentTime;
         if (!ScreenOffReceiver.wasScreenOn) {
             // THIS IS WHEN ONRESUME() IS CALLED DUE TO A SCREEN STATE CHANGE
             System.out.println("SCREEN TURNED ON");
+            resumeChron(findViewById(R.id.chronos));
+
         } else {
             // THIS IS WHEN ONRESUME() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
         }
