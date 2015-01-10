@@ -1,5 +1,8 @@
 package com.example.chavezgt.chronometer;
 
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Chronometer;
 
 
+
 public class MainActivity extends ActionBarActivity {
 private Chronometer chronometer;
 private long pausedTime = 0;
@@ -18,6 +22,11 @@ private  static long currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        BroadcastReceiver mReceiver = new ScreenOffReceiver();
+        registerReceiver(mReceiver, filter);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Window window = this.getWindow();
@@ -51,6 +60,31 @@ private  static long currentTime;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onPause() {
+        // WHEN THE SCREEN IS ABOUT TO TURN OFF
+        if (ScreenOffReceiver.wasScreenOn) {
+            // THIS IS THE CASE WHEN ONPAUSE() IS CALLED BY THE SYSTEM DUE TO A SCREEN STATE CHANGE
+            System.out.println("SCREEN TURNED OFF");
+        } else {
+            // THIS IS WHEN ONPAUSE() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        // ONLY WHEN SCREEN TURNS ON
+        if (!ScreenOffReceiver.wasScreenOn) {
+            // THIS IS WHEN ONRESUME() IS CALLED DUE TO A SCREEN STATE CHANGE
+            System.out.println("SCREEN TURNED ON");
+        } else {
+            // THIS IS WHEN ONRESUME() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
+        }
+        super.onResume();
+    }
+
     public void startChron(View view){
         currentTime =  SystemClock.elapsedRealtime();
         chronometer.setBase(currentTime);
