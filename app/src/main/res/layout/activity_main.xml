@@ -33,6 +33,8 @@
         android:layout_below="@+id/chronos"
         android:layout_alignParentStart="true" />
 
+     <!--Need to include onclick goHome on the specified button -->
+     <!--Chronometer Object-->
     <Chronometer
         android:id="@+id/chronos"
         android:layout_width="wrap_content"
