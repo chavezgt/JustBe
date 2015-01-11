@@ -1,8 +1,10 @@
 package com.example.chavezgt.chronometer;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -15,19 +17,29 @@ import android.widget.Chronometer;
 
 
 
+
 public class MainActivity extends ActionBarActivity {
 private Chronometer chronometer;
 private long pausedTime = 0;
 private  static long currentTime;
+    //for test
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        //filter.addAction(Intent.ACTION_SCREEN_OFF);
+
+        super.onCreate(savedInstanceState);
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new ScreenOffReceiver();
         registerReceiver(mReceiver, filter);
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Window window = this.getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -64,27 +76,28 @@ private  static long currentTime;
     @Override
     protected void onPause() {
         // WHEN THE SCREEN IS ABOUT TO TURN OFF
-        if (ScreenOffReceiver.wasScreenOn) {
+      /*  if (ScreenOffReceiver.wasScreenOn) {
             // THIS IS THE CASE WHEN ONPAUSE() IS CALLED BY THE SYSTEM DUE TO A SCREEN STATE CHANGE
             System.out.println("SCREEN TURNED OFF");
             stopChron(findViewById(R.id.chronos));
         } else {
             // THIS IS WHEN ONPAUSE() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
-        }
+        } */
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         // ONLY WHEN SCREEN TURNS ON
-        if (!ScreenOffReceiver.wasScreenOn) {
+        /*if (!ScreenOffReceiver.wasScreenOn) {
             // THIS IS WHEN ONRESUME() IS CALLED DUE TO A SCREEN STATE CHANGE
             System.out.println("SCREEN TURNED ON");
             resumeChron(findViewById(R.id.chronos));
 
+
         } else {
             // THIS IS WHEN ONRESUME() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
-        }
+        }*/
         super.onResume();
     }
 
@@ -92,13 +105,13 @@ private  static long currentTime;
         currentTime =  SystemClock.elapsedRealtime();
         chronometer.setBase(currentTime);
         chronometer.start();
-
     }
     public void stopChron(View view){
 
         pausedTime = SystemClock.elapsedRealtime() - chronometer.getBase();
         chronometer.stop();
-
+        Intent intentStopServ = new Intent(this, ReadScreenService.class);
+        stopService(intentStopServ);
     }
     public void resumeChron(View view){
 
