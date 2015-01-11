@@ -15,29 +15,26 @@ import com.example.chavezgt.chronometer.MainActivity;
 public class ScreenOffReceiver
         extends BroadcastReceiver{
 
-    //Instance Variables 1 =true
+    //Needs to be static to be accessed from other classes
     static boolean  screenOff;
 
-
-
-
-    //When it recceives it will send a message to service
+    //Reads if screen has been turned On or Off
     @Override
     public void onReceive
     (final Context context, Intent intent){
-
+        //Screen is turned off
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-            //DO SOMETHINGequals(Intent
             screenOff = true;
-        }else if(intent.getAction().equals(Intent.ACTION_SCREEN_ON))
+        }
+        //Screen is turned on
+        else if(intent.getAction().equals(Intent.ACTION_SCREEN_ON))
 
             if(intent.getAction().equals(Intent.ACTION_SCREEN_ON)){
-                //dO SOMETHING ELSE
                 screenOff = false;
             }
-        //Create Message Object and append Action screen
+
+        //Create an intent and start the service
         Intent i = new Intent(context, ReadScreenService.class);
-        i.putExtra("screen_state", screenOff);
         context.startService(i);
 
     }
