@@ -16,7 +16,7 @@ public class ScreenOffReceiver
         extends BroadcastReceiver{
 
     //Instance Variables 1 =true
-    private boolean  screenOff;
+    static boolean  screenOff;
 
 
 

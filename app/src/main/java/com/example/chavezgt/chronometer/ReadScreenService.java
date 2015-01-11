@@ -3,6 +3,7 @@ package com.example.chavezgt.chronometer;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.Looper;
 import android.app.Service;
@@ -13,14 +14,22 @@ import android.view.Display;
  */
 
 public class ReadScreenService extends Service {
+    public final static String EXTRA_MESSAGE = "com.example.chavezgt.chronometer..MESSAGE";
+
     private Looper mServiceLooper;
-    private ScreenOffReceiver myScreenReceiver;
     /** indicates how to behave if the service is killed */
     int mStartMode;
     /** interface for clients that bind */
-    IBinder mBinder;
+    IBinder mBinder = new LocalBinder();
     /** indicates whether onRebind should be used */
     boolean mAllowRebind;
+
+    public class LocalBinder extends Binder {
+      //  ReadScreenService  getService(){
+
+     //   }
+    }
+
 
      @Override
      public void onCreate(){
@@ -30,15 +39,11 @@ public class ReadScreenService extends Service {
          filter.addAction(Intent.ACTION_SCREEN_OFF);
          BroadcastReceiver mReceiver = new ScreenOffReceiver();
          registerReceiver(mReceiver, filter);
-         System.out.println("Cregatin");
-
      }
 
     /** The service is starting, due to a call to startService() */
     @Override
     public int  onStartCommand(Intent intent, int flags, int startId){
-
-
         System.out.println("ME LA PELAS");
         //Deprecated Mode
        /* if (ScreenOffReceiver.wasScreenOn) {
@@ -55,11 +60,16 @@ public class ReadScreenService extends Service {
         } else {
             // THIS IS WHEN ONRESUME() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
         } */
-        boolean screenOn = intent.getBooleanExtra("screen_state", false);
+        boolean screenOn = ScreenOffReceiver.screenOff;
         if(screenOn){
-            
+            System.out.println("Apagada");
+            Intent i = new Intent(this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            i.putExtra("com.example.chavezgt.chronometer.MESSAGE", true);
+            //helloo
+            this.startActivity(i);
+
         }else {
-            System.out.println("Prendida");
 
         }
 

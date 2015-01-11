@@ -21,7 +21,7 @@ import android.widget.Chronometer;
 public class MainActivity extends ActionBarActivity {
 private Chronometer chronometer;
 private long pausedTime = 0;
-private  static long currentTime;
+private boolean secondTime = false;
     //for test
 
 
@@ -31,15 +31,11 @@ private  static long currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        //filter.addAction(Intent.ACTION_SCREEN_OFF);
-
         super.onCreate(savedInstanceState);
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new ScreenOffReceiver();
         registerReceiver(mReceiver, filter);
-
         setContentView(R.layout.activity_main);
         Window window = this.getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -51,14 +47,14 @@ private  static long currentTime;
         chronometer = (Chronometer) findViewById(R.id.chronos);
     }
 
-
+    //Default Options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
+    //Default options
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -73,50 +69,47 @@ private  static long currentTime;
         return super.onOptionsItemSelected(item);
     }
 
+    //On Stop detects if the user turned off the screen or accessed his phone
+    //The first option stops the chronometer. The second one started it
     @Override
-    protected void onPause() {
-        // WHEN THE SCREEN IS ABOUT TO TURN OFF
-      /*  if (ScreenOffReceiver.wasScreenOn) {
-            // THIS IS THE CASE WHEN ONPAUSE() IS CALLED BY THE SYSTEM DUE TO A SCREEN STATE CHANGE
-            System.out.println("SCREEN TURNED OFF");
+    protected void onStop() {
+        super.onStop();
+
+        if (ScreenOffReceiver.screenOff) {
+            // THIS IS WHEN ONRESUME() IS CALLED DUE TO A SCREEN STATE CHANGE
             stopChron(findViewById(R.id.chronos));
         } else {
-            // THIS IS WHEN ONPAUSE() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
-        } */
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        // ONLY WHEN SCREEN TURNS ON
-        /*if (!ScreenOffReceiver.wasScreenOn) {
-            // THIS IS WHEN ONRESUME() IS CALLED DUE TO A SCREEN STATE CHANGE
-            System.out.println("SCREEN TURNED ON");
+            // THIS IS WHEN ONRESUME() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
             resumeChron(findViewById(R.id.chronos));
 
+        }
+    }
 
-        } else {
-            // THIS IS WHEN ONRESUME() IS CALLED WHEN THE SCREEN STATE HAS NOT CHANGED
-        }*/
+    //Default function
+    @Override
+    protected void onResume() {
         super.onResume();
     }
 
-    public void startChron(View view){
-        currentTime =  SystemClock.elapsedRealtime();
-        chronometer.setBase(currentTime);
-        chronometer.start();
-    }
-    public void stopChron(View view){
+
+
+    public  void stopChron(View view){
 
         pausedTime = SystemClock.elapsedRealtime() - chronometer.getBase();
         chronometer.stop();
-        Intent intentStopServ = new Intent(this, ReadScreenService.class);
-        stopService(intentStopServ);
     }
     public void resumeChron(View view){
 
         chronometer.setBase(SystemClock.elapsedRealtime() - pausedTime);
         chronometer.start();
+    }
+    public void goHome(View view){
+
+        Intent homeIntent= new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+
     }
 
 }
